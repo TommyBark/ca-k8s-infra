@@ -102,6 +102,13 @@ def train_func(config):
         scheme="http",
     )
 
+    # Initialize the S3 filesystem for logging and tracking artifacts
+    fs_log= S3FileSystem(
+        access_key="minioadmin",
+        secret_key="minioadmin",  # noqa
+        endpoint_override=f"minio.minio-external-{os.environ['ENVIRONMENT']}.svc.cluster.local:9000",
+        scheme="http",
+    )
     # copy data to disk
     print("Copying data to disk")
     with TemporaryDirectory() as tmp_dir:
@@ -247,7 +254,8 @@ def train_func(config):
             # Copy the saved model files back to S3
             checkpoint_path = f"models/checkpoints/sentiment_model/{ray.train.get_context().get_trial_id()}"
             copy_dir_to_s3(fs, local_model_dir, checkpoint_path)
-
+            copy_dir_to_s3(fs_log, local_model_dir, checkpoint_path)
+            
             write_log("Training completed", {
                 "final_loss": epoch_loss / len(train_loader)
             })
