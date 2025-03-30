@@ -17,12 +17,6 @@
           "description": "Enable Nginx deployment",
           "default": true
         },
-        "initialReplicas": {
-          "type": "integer",
-          "description": "Initial number of Nginx replicas",
-          "minimum": 1,
-          "default": 1
-        },
         "image": {
           "type": "string",
           "description": "Nginx container image",
@@ -82,11 +76,6 @@
           "description": "Period for scale down policy (in seconds)",
           "minimum": 1,
           "default": 60
-        },
-        "httpProxyImage": {
-          "type": "string",
-          "description": "KEDA HTTP add-on image",
-          "default": "ghcr.io/kedacore/http-add-on:0.6.0"
         },
         "requestRateThreshold": {
           "type": "string",
